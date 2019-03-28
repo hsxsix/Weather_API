@@ -36,7 +36,9 @@ class DataModify():
                                         weather_data["data"][str(day)]["aqi"].split(",")[0])
                     modify_weather["data"][str(day)]["date"] = self.char_dotmatrix("{}-{}".format(year, 
                                         weather_data["data"][str(day)]["date"][:7].replace("月","/").replace("日","")))
-            return modify_weather 
+            return modify_weather
+        else:
+            return weather_data
 
     def char_dotmatrix(self, chars):
         dotmatrix_list = []
