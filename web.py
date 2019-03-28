@@ -5,7 +5,7 @@ sys.path.append('../')
 from urllib.parse import urlencode
 from flask import Flask, request, jsonify
 from flask_caching import Cache
-from searchweather import GetWeather
+from searchweather import Weather
 from modify import weather_modify
 
 cache_config = {
@@ -15,7 +15,7 @@ cache_config = {
         "CACHE_REDIS_DB":"",
         "CACHE_REDIS_PASSWORD": "sUS7?io#hP%m6ODB"
         }
-weather = GetWeather()
+weather = Weather()
 
 app = Flask(__name__)
 cache = Cache(app,config=cache_config)
