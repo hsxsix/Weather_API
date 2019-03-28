@@ -35,7 +35,7 @@ class DataModify():
                     modify_weather["data"][str(day)]["current_temp"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["current_temp"])
                     modify_weather["data"][str(day)]["current_weather"] = self.char_dotmatrix(
-                                        weather_data["data"][str(day)]["current_weather"])
+                                        weather_data["data"][str(day)]["current_weather"].replace('(实时)', ''))
                     modify_weather["data"][str(day)]["aqi"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["aqi"].split(",")[0])
                     modify_weather["data"][str(day)]["date"] = self.char_dotmatrix("{}-{}".format(year, 
