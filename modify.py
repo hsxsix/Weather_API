@@ -13,12 +13,15 @@ class DataModify():
         modify_weather = {}
         if mark.lower() not in self.mark_list:
             return {"error":"parameter error"}
-        modify_weather["code"] = 200
+        if weather_data.get("code", "") != "ok":
+            return {"error":"weather data erroe"}
+        modify_weather["code"] = 'ok'
         modify_weather["city"] = weather_data["city"]
         modify_weather["data"] = {}
         if mark == "micropython_ssd1351":
             year = datetime.datetime.now().year
             for day in range(4):
+                modify_weather["data"][str(day)] = {}
                 modify_weather["data"][str(day)]["weather"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["weather"])
                 modify_weather["data"][str(day)]["temp"] = self.char_dotmatrix(
@@ -36,7 +39,7 @@ class DataModify():
                     modify_weather["data"][str(day)]["aqi"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["aqi"].split(",")[0])
                     modify_weather["data"][str(day)]["date"] = self.char_dotmatrix("{}-{}".format(year, 
-                                        weather_data["data"][str(day)]["date"][:7].replace("月","/").replace("日","")))
+                                        weather_data["data"][str(day)]["date"][:7].replace("月","-").replace("日","").strip()))
             return modify_weather
         else:
             return weather_data
@@ -63,4 +66,11 @@ class DataModify():
         return dotmatrix_list 
 
 weather_modify = DataModify()
+
+if __name__ == "__main__":
+    from searchweather import Weather
+    weather = Weather()
+    weather_data = weather.weather_data("成都")
+    print(weather_data)
+    print(weather_modify.weather(weather_data, "micropython_ssd1351"))
 # del DataModify 
