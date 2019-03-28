@@ -5,7 +5,7 @@ from urllib.parse import quote
 import requests
 from lxml import etree as et 
 
-class GetWeather(): 
+class Weather(): 
     def __init__(self):
         baiduhomepage = "https://www.baidu.com"
         self.url = (baiduhomepage+"/s?ie=utf-8"
@@ -29,7 +29,7 @@ class GetWeather():
                 "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36"
                 }
 
-    def get_weather_data(self, keywords, node=None):
+    def weather_data(self, keywords):
         kd = (quote(keywords+" 天气",'utf-8'))
         html_code = requests.get(url=self.url % kd, headers=self.headers, timeout=5)
         # print(html_code.text)
@@ -37,7 +37,7 @@ class GetWeather():
         weather_selector = selector.xpath('//div[@id="content_left"]//div[@id="1"]')
         if weather_selector:
             try:
-                weather_data = self.parser_weather_data(weather_selector[0], node)
+                weather_data = self._parser_weather_data(weather_selector[0], node)
                 return weather_data 
             except Exception as e:
                 print(e)
@@ -45,7 +45,7 @@ class GetWeather():
         else:
             return {"code":"error", "city":keywords, "data":"获取数据失败!Get data failed!"}
         
-    def parser_weather_data(self, weather_selector, node):
+    def _parser_weather_data(self, weather_selector, node):
         city = ''.join(weather_selector.xpath('.//h3[@class="t c-gap-bottom-small"]/a//text()'))[:-17]
         today = weather_selector.xpath('.//div[@class="op_weather4_twoicon"]/a[1]')[0]
         today_date = ''.join(today.xpath('./p[@class="op_weather4_twoicon_date"]/text()')).strip() 
@@ -141,39 +141,6 @@ class GetWeather():
                         }
                     }
                 }
-        if node.upper() == "NODEMCU":
-            year = datetime.datetime.now().year
-            nodemcu_weather_data = {
-                    "code":"200",
-                    "city":city,
-                    "data":{
-                    "0":{
-                        "weather":today_weather,
-                        "current_temp":current_temp,
-                        "aqi":today_aqi.split(",")[0], 
-                        "date":str(year)+"-"+today_date[:7].replace("月","-").replace("日","").strip(" "),
-                        "temp":today_temp.replace(' ~ ',' ')
-                        },
-                    "1":{
-                        "weather":tomorrow_weather,
-                        "date":tomorrow_date.replace("月","/").replace("日",""),
-                        "temp":tomorrow_temp.replace(' ~ ',' '),
-                        },
-                    "2":{
-                        "weather":after_tomorrow_weather,
-                        "date":after_tomorrow_date.replace("月","/").replace("日",""),
-                        "temp":after_tomorrow_temp.replace(' ~ ',' '),
-                        },
-                    "3":{
-                        "weather":after_three_day_weather,
-                        "date":after_three_day_date.replace("月","/").replace("日",""),
-                        "temp":after_three_day_temp.replace(' ~ ',' '),
-                        },
-                    }
-                }
-            for day in range(4):
-                nodemcu_weather_data["data"][str(day)]["weather_code"] = weather_data["data"][str(day)]["icon"].split('/')[-1].split('.')[0]
-            return nodemcu_weather_data 
         print("get weather data from net")
         return weather_data 
 
