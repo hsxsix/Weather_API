@@ -37,7 +37,7 @@ class Weather():
         weather_selector = selector.xpath('//div[@id="content_left"]//div[@id="1"]')
         if weather_selector:
             try:
-                weather_data = self._parser_weather_data(weather_selector[0], node)
+                weather_data = self._parser_weather_data(weather_selector[0])
                 return weather_data 
             except Exception as e:
                 print(e)
@@ -45,7 +45,7 @@ class Weather():
         else:
             return {"code":"error", "city":keywords, "data":"获取数据失败!Get data failed!"}
         
-    def _parser_weather_data(self, weather_selector, node):
+    def _parser_weather_data(self, weather_selector):
         city = ''.join(weather_selector.xpath('.//h3[@class="t c-gap-bottom-small"]/a//text()'))[:-17]
         today = weather_selector.xpath('.//div[@class="op_weather4_twoicon"]/a[1]')[0]
         today_date = ''.join(today.xpath('./p[@class="op_weather4_twoicon_date"]/text()')).strip() 
@@ -148,6 +148,6 @@ def get_city_by_ip(ip_addr):
     pass
 if __name__ == "__main__":
     city = input("请输入城市名:")
-    w = GetWeather()
-    weather = w.get_weather_data(city, "esp8266")
+    w = Weather()
+    weather = w.weather_data(city)
     print(weather)
