@@ -60,4 +60,4 @@ class DataModify():
         return dotmatrix_list 
 
 weather_modify = DataModify()
-del DataModify() 
+# del DataModify 
