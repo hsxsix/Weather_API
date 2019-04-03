@@ -25,7 +25,7 @@ class DataModify():
                 modify_weather["data"][str(day)]["weather"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["weather"])
                 modify_weather["data"][str(day)]["temp"] = self.char_dotmatrix(
-                                        weather_data["data"][str(day)]["temp"].split(' ~ '))
+                                        weather_data["data"][str(day)]["temp"].replace(' ', '℃'))
                 modify_weather["data"][str(day)]["aqi"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["aqi"])
                 modify_weather["data"][str(day)]["date"] = self.char_dotmatrix(
@@ -36,10 +36,10 @@ class DataModify():
                                         weather_data["data"][str(day)]["current_temp"])
                     modify_weather["data"][str(day)]["current_weather"] = self.char_dotmatrix(
                                         weather_data["data"][str(day)]["current_weather"].replace('(实时)', ''))
-                    modify_weather["data"][str(day)]["aqi"] = self.char_dotmatrix(
-                                        weather_data["data"][str(day)]["aqi"].split(",")[0])
-                    modify_weather["data"][str(day)]["date"] = self.char_dotmatrix("{}-{}".format(year, 
-                                        weather_data["data"][str(day)]["date"][:7].replace("月","-").replace("日","").strip()))
+                    modify_weather["data"][str(day)]["aqi"] = self.char_dotmatrix("空气质量:{}".format(
+                                        weather_data["data"][str(day)]["aqi"].replace(",", " ")))
+                    modify_weather["data"][str(day)]["date"] = self.char_dotmatrix("{}/{}".format(year, 
+                                        weather_data["data"][str(day)]["date"][:9].replace("月","/").replace("日","").strip()))
             return modify_weather
         else:
             return weather_data
